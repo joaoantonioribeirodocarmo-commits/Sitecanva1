@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Ocorrência de Avarias: Controle de Materiais</title>
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #3b82f6;
+            --accent-color: #f59e0b;
+            --bg-color: #e2e8f0;
+            --text-color: #334155;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 30px 15px;
+        }
+
+        /* Container principal em formato de páginas verticais empilhadas estilo documento A4 */
+        .report-wrapper {
+            width: 100%;
+            max-width: 850px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .page-sheet {
+            background-color: var(--card-bg);
+            border-radius: 4px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 60px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            min-height: 1100px; /* Simula proporção A4 vertical */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Numeração da página no rodapé interno */
+        .page-footer {
+            text-align: right;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 15px;
+            margin-top: 30px;
+        }
+
+        /* Estilização dos Elementos Internos */
+        h1.report-title {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        h2.section-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 15px;
+            color: #475569;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+
+        li {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 8px;
+            color: #475569;
+        }
+
+        .cover-info {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 1.15rem;
+            line-height: 2.2;
+            color: #1e293b;
+            font-weight: 500;
+            background-color: #f8fafc;
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .illustration-box {
+            background-color: #f1f5f9;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 25px 0;
+            text-align: center;
+            border: 1px solid #cbd5e1;
+        }
+
+        .illustration-box img {
+            width: 100%;
+            max-height: 280px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .illustration-caption {
+            padding: 10px;
+            font-size: 0.85rem;
+            color: #64748b;
+            font-style: italic;
+            background-color: #e2e8f0;
+        }
+
+        .table-custom {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+
+        .table-custom th, .table-custom td {
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        .table-custom th {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .table-custom tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        /* Botão flutuante para impressão ou exportação */
+        .print-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: background-color 0.2s, transform 0.2s;
+            z-index: 1000;
+        }
+
+        .print-float:hover {
+            background-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+            }
+            .report-wrapper {
+                gap: 0;
+            }
+            .page-sheet {
+                box-shadow: none;
+                border: none;
+                page-break-after: always;
+                min-height: auto;
+                padding: 20px;
+            }
+            .print-float {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-sheet {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botão para imprimir / salvar PDF em formato vertical -->
+    <button class="print-float" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+
+    <div class="report-wrapper">
+
+        <!-- PÁGINA 1: CAPA -->
+        <div class="page-sheet">
+            <div>
+                <h1 class="report-title">Relatório de Ocorrência de Avarias: Controle de Materiais</h1>
+                <div class="illustration-box">
+                    <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80" alt="Estoque ou depósito">
+                    <div class="illustration-caption">Ilustração: Fotografia de um estoque, depósito ou funcionário realizando a conferência de mercadorias</div>
+                </div>
+                <div class="cover-info">
+                    <p><strong>Nome da Instituição:</strong> promec</p>
+                    <p><strong>Nome do Aprendiz:</strong> João antonio</p>
+                    <p><strong>Nome do Curso:</strong> assitente adm</p>
+                    <p><strong>Nome do Professor:</strong> fernando</p>
+                    <p><strong>Cidade e Ano:</strong> srandi/2026</p>
+                </div>
+            </div>
+            <div class="page-footer">Página 1 de 10</div>
+        </div>
+
+        <!-- PÁGINA 2 -->
+        <div class="page-sheet">
+            <div>
+                <h2 class="section-title">Página 2 – Introdução e importância do controle de materiais</h2>
+                <p>O controle de materiais consiste no gerenciamento sistemático de todos os fluxos físicos e informacionais relacionados aos insumos e produtos de uma organização. Isso engloba o acompanhamento rigoroso da entrada, da saída, do armazenamento adequado e das condições gerais dos produtos sob a custódia da empresa.</p>
+                <p>As organizações precisam monitorar essas etapas de perto para garantir a eficiência operacional. Sem um acompanhamento preciso, corre-se o risco de desabastecimento, excesso de estoque imobilizado ou perdas financeiras expressivas decorrentes de danos e extravios.</p>
+                <p>A importância desse controle reside na sua capacidade direta de reduzir custos operacionais, evitar desperdícios de matéria-prima ou mercadorias e manter a alta disponibilidade dos produtos para atender aos clientes no tempo certo e com a qualidade esperada.</p>
+                <div class="illustration-box">
+                    <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=800&q=80" alt="Funcionário conferindo mercadorias">
+                    <div class="illustration-caption">Ilustração: Funcionário conferindo mercadorias com uma prancheta ou leitor de código de barras</div>
+                </div>
+            </div>
+            <div class="page-footer">Página 2 de 10</div>
+        </div>
+
+        <!-- PÁGINA 3 -->
+        <div class="page-sheet">
+            <div>
+                <h2 class="section-title">Página 3 – Conceito de perdas e avarias</h2>
+                <p>No contexto logístico e de estoque, é fundamental distinguir os conceitos que afetam o patrimônio da empresa:</p>
+                <ul>
+                    <li><strong>Perdas:</strong> Desaparecimento ou redução quantitativa de itens por motivos diversos, como furtos, extravios ou erros administrativos.</li>
+                    <li><strong>Faltas:</strong> Divergências encontradas entre o saldo físico apurado em inventário e o saldo registrado nos sistemas de controle.</li>
+                    <li><strong>Quebras:</strong> Reduções físicas de peso, volume ou unidades inerentes ao manuseio ou à natureza do produto (como produtos frágeis).</li>
+                    <li><strong>Avarias:</strong> Danos físicos sofridos pelos produtos que os tornam total ou parcialmente impróprios para uso ou comercialização.</li>
+                </ul>
+                <p><strong>Exemplos práticos:</strong></p>
+                <ol>
+                    <li>Em um supermercado, uma palete de caixas de leite derrubada acidentalmente pela empilhadeira, rasgando as embalagens.</li>
+                    <li>Em um depósito de eletrônicos, um televisor que cai no chão durante a separação de pedidos, quebrando a tela.</li>
+                    <li>Em um escritório, resmas de papel armazenadas em local úmido que absorvem água e ficam mofadas e inutilizáveis.</li>
+                </ol>
+                <div class="illustration-box">
+                    <img src="https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&w=800&q=80" alt="Mercadoria danificada">
+                    <div class="illustration-caption">Ilustração: Caixa amassada, produto quebrado ou mercadoria danificada durante o transporte</div>
+                </div>
+            </div>
+            <div class="page-footer">Página 3 de 10</div>
+        </div>
+
+        <!-- PÁGINA 4 -->
+        <div class="page-sheet">
+            <div>
+                <h2 class="section-title">Página 4 – Principais causas das avarias</h2>
+                <p>Os danos aos materiais decorrem frequentemente de falhas operacionais e estruturais ao longo da cadeia logística. As principais causas englobam:</p>
+                <ul>
+                    <li><strong>Transporte inadequado:</strong> Movimentação brusca, falta de amarração correta dos produtos nos veículos ou estradas em más condições.</li>
+                    <li><strong>Empilhamento incorreto:</strong> Ultrapassar o limite de peso suportado pelas caixas inferiores ou desrespeitar as orientações impressas nas embalagens ("este lado para cima").</li>
+                    <li><strong>Falta de conferência:</strong> Receber mercadorias sem inspecionar a integridade das embalagens no ato da entrega.</li>
+                    <li><strong>Armazenamento impróprio:</strong> Exposição excessiva a umidade, calor intenso, luz solar direta ou prateleiras em mau estado.</li>
+                    <li><strong>Manuseio inadequado:</strong> Uso incorreto de equipamentos de carga ou força excessiva dos operadores.</li>
+                </ul>
+                <p>Cada uma dessas situações gera prejuízos financeiros diretos por descarte de itens, além de atrasos nas entregas aos clientes e desgaste na imagem da empresa.</p>
+                <div class="illustration-box">
+                    <img src="https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&w=800&q=80" alt="Empilhamento e movimentação de cargas">
+                    <div class="illustration-caption">Ilustração: Caixas empilhadas incorretamente ou funcionário movimentando mercadorias de maneira inadequada</div>
+                </div>
+            </div>
+            <div class="page-footer">Página 4 de 10</div>
+        </div>
+
+        <!-- PÁGINA 5 -->
+        <div class="page-sheet">
+            <div>
+                <h2 class="section-title">Página 5 – Identificação e conferência de produtos danificados</h2>
+                <p>A identificação de avarias deve ocorrer de forma contínua e em momentos estratégicos da operação: no recebimento (na doca junto ao fornecedor), durante o armazenamento nas prateleiras, na movimentação interna e na separação final de pedidos (picking/packing) antes do envio ao cliente.</p>
+                <p>A conferência rigorosa envolve verificar criticamente as quantidades físicas declaradas, o estado de conservação das embalagens primárias e secundárias, as condições intrínsecas dos produtos e a exatidão das informações contidas nos documentos fiscais e de recebimento.</p>
+                <div class="illustration-box">
+                    <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80" alt="Inspeção de mercadorias">
+                    <div class="illustration-caption">Ilustração: Funcionário inspecionando uma caixa e verificando a integridade de uma mercadoria</div>
+                </div>
+            </div>
+            <div class="page-footer">Página 5 de 10</div>
+        </div>
+
+        <!-- PÁGINA 6 -->
+        <div class="page-sheet">
+            <div>
+                <h2 class="section-title">Página 6 – Registro da ocorrência de avarias</h2>
+                <p>Sempre que um dano é constatado, é obrigatória a elaboração de um registro formal de ocorrência. Esse documento deve conter informações precisas para permitir a rastreabilidade e a responsabilização:</p>
+                <ul>
+                    <li>Data, horário e local exato da ocorrência.</li>
+                    <li>Descrição detalhada do produto (código, lote e nome).</li>
+                    <li>Quantidade exata de itens danificados.</li>
+                    <li>Tipo de avaria identificada (ex: rasgado, molhado, quebrado).</li>
+                    <li>Possível causa estimada do dano.</li>
+                    <li>Nome completo do colaborador responsável pelo registro.</li>
+                    <li>Providências imediatas tomadas (ex: descarte, devolução ao fornecedor, reembalagem).</li>
+                </ul>
+                <div class="illustration-box">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80" alt="Formulário e registro">
+                    <div class="illustration-caption">Ilustração: Formulário de ocorrência preenchido ao lado de uma mercadoria danificada</div>
+                </div>
+            </div>
+            <div class="page-footer">Página 6 de 10</div>
+        </div>
+
+        <!-- PÁGINA 7 -->
+        <div class="page-sheet">
+            <div>
+                <h2 class="section-title">Página 7 – Procedimentos após identificar uma avaria</h2>
+                <p>O fluxo após a constatação de um produto avariado segue etapas padronizadas:</p>
+                <ol>
+                    <li><strong>Separação física imediata:</strong> O item é retirado do estoque ativo para evitar que seja misturado ou enviado por engano ao cliente.</li>
+                    <li><strong>Identificação visual:</strong> O produto é colocado em uma área isolada e sinalizada (ex: "Área de Quarentena" ou "Produtos Avariados").</li>
+                    <li><strong>Comunicação interna:</strong> O setor responsável (como Qualidade, Compras ou Logística) é notificado formalmente por meio do registro de ocorrência.</li>
+                    <li><strong>Avaliação e Destinação:</strong> Define-se se o item passará por conserto, devolução ao fornecedor para crédito/troca, doação ou descarte ecológico.</li>
+                </ol>
+                <p>Produtos impróprios nunca devem ser comercializados ou utilizados sem avaliação técnica prévia, pois comprometem a segurança e a confiabilidade da marca.</p>
+                <div class="illustration-box">
+                    <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80" alt="Produtos separados para inspeção">
+                    <div class="illustration-caption">Ilustração: Produtos danificados separados em uma área identificada para inspeção</div>
+                </div>
+            </div>
+            <div class="page-footer">Página 7 de 10</div>
+        </div>
+
+        <!-- PÁGINA 8 -->
+        <div class="page-sheet">
+            <div>
+                <h2 class="section-title">Página 8 – Prevenção de perdas e avarias</h2>
+                <p>Para mitigar riscos e evitar desperdícios, as empresas implementam medidas preventivas essenciais:</p>
+                <ul>
+                    <li><strong>Organização do estoque:</strong> Manter corredores limpos, desimpedidos e layout funcional.</li>
+                    <li><strong>Capacitação dos funcionários:</strong> Treinar continuamente as equipes sobre manuseio correto e normas de segurança.</li>
+                    <li><strong>Controle rigoroso de validade:</strong> Aplicar o método PEPS (Primeiro a Entrar, Primeiro a Sair) para evitar vencimentos.</li>
+                    <li><strong>Conferência rigorosa de mercadorias:</strong> Validar rigorosamente a carga na entrada e na saída.</li>
+                    <li><strong>Manutenção preventiva de equipamentos:</strong> Revisar periodicamente empilhadeiras, paleteiras e estruturas porta-paletes.</li>
+                    <li><strong>Armazenamento correto:</strong> Respeitar limites de peso, empilhamento máximo e condições climáticas recomendadas.</li>
+                </ul>
+                <div class="illustration-box">
+                    <img src="https://images.unsplash.com/photo-1590246835775-88ee11648a97?auto=format&fit=crop&w=800&q=80" alt="Estoque organizado">
+                    <div class="illustration-caption">Ilustração: Estoque organizado, com prateleiras identificadas e caixas armazenadas adequadamente</div>
+                </div>
+            </div>
+            <div class="page-footer">Página 8 de 10</div>
+        </div>
+
+        <!-- PÁGINA 9 -->
+        <div class="page-sheet">
+            <div>
+                <h2 class="section-title">Página 9 – Consequências financeiras e plano de ação</h2>
+                <p>Perdas e avarias impactam diretamente o DRE da empresa: elevam os custos operacionais, geram rupturas de estoque, prejudicam o cumprimento de prazos de vendas e geram insatisfação nos clientes finais.</p>
+                
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Problema Identificado</th>
+                            <th>Medida Corretiva</th>
+                            <th>Medida Preventiva</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Queda de mercadorias no transporte interno por empilhamento incorreto.</td>
+                            <td>Isolar e avaliar os itens danificados para descarte ou pedido de reposição.</td>
+                            <td>Realizar treinamento prático de arrumação de cargas para os operadores de logística.</td>
+                        </tr>
+                        <tr>
+                            <td>Produtos perecíveis vencidos no fundo das prateleiras do depósito.</td>
+                            <td>Retirar e dar baixa contábil imediata nos itens vencidos.</td>
